@@ -46,10 +46,13 @@
 		        Name: <input  type="text" class="inbox__list-from" ng-model="field.name" /><br>
 		        Phone: <input type="text" class="inbox__list-subject" ng-model="field.phone"/>
 		        <input type="hidden" class="" ng-model="field.id"/>
-		        </form>  
+		        
+		             <button class="btn btn-warning" ng-click="submit(one_contact._id,field.name,field.phone)" ng-disabled="submit_button_{{one_contact._id}}">Submit</button>
+		         </form> 
 		      </div>
 		   	  <br>
-		      <button class="btn btn-warning" ng-click="submit(form)" ng-disabled="submit_button_{{one_contact._id}}">Submit</button>
+		 
+			 
 			  <button class="btn btn-warning" ng-click="addFields(one_contact._id)" ng-disabled="clicked" >Edit</button>
 	      </div><!--  <div class="inbox__list-info"> -->
 	 
