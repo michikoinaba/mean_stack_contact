@@ -8,8 +8,9 @@ return $resource('/api/contacts/:id', { id: '@_id' }, {//adding the endpoint
  update: { // We need to define this method manually as it is not provided with ng-resource
    method: 'PUT'
 	 
- }
-	//'create':  { method: 'POST' },
+ },
+
+ // save:  { method: 'POST' },
    // 'index':   { method: 'GET', isArray: true },
    // 'show':    { method: 'GET', isArray: false },
    // 'update':  { method: 'PUT' },

@@ -46,27 +46,19 @@ app.controller('ContactCtrl', function($scope, Contact)  {
 	
 	  'use strict';
       $scope.title= "Contact List";
-     $scope.contact = new Contact();
+      $scope.contact = new Contact();
      
     
-       
-     /**
-      * get a contact by ID
-      * 
-      */
-    /* var getContactById = function(id){
-    	 
-    	 Contact.get({id:id}, function(result) {
-    		    $scope.contact = result;
-    		    console.log('User name is ',$scope.contact.name);
-    		    
-    		    return $scope.contact;
-    		});
-     };
-     */
+   
      
      //refresh function retreive all contact data from mongodb and output them.
      var refresh = function() {
+       
+    	//hide the add contact form 
+       $scope.addcontact_button_clicked = true;
+       
+       //unset ng-hide the add new contact button.
+       $scope.addcontact_button=false;
        
        //returns all contact objects.
        $scope.contacts = Contact.query(); 
@@ -89,16 +81,42 @@ app.controller('ContactCtrl', function($scope, Contact)  {
      
 
      //add new contact and save it.
-     $scope.add = function(contact) {
-    	  Contact.save(contact,function(contact){
-    	    refresh();
-    	  });
-    	};
+     $scope.addContact = function() {
+    	 
+    	 //set the submitted to true to use angularjs validations
+    	 $scope.submitted=true;
+    	 
+    	 console.log("name " + $scope.newname+' phone '+$scope.newphone);
+    	 
+    	 if(($scope.newname !==null ) && ($scope.newphone !==null)){
+    		 $scope.contact = new Contact();
+        	 $scope.contact.name=$scope.newname;
+        	 $scope.contact.phone=$scope.newphone;
+        	 
+        	  Contact.save( $scope.contact,function(data){
+        			//hide the add contact form 
+        	       $scope.addcontact_button_clicked = true;
+        	       
+        	       //unset ng-hide the add new contact button.
+        	       $scope.addcontact_button=false;
+        	    
+        	       console.log("save data " + data);
+        	       //show contact list
+        	       refresh();
+        	  },
+        	  function(error){
+        		  console.log("save error " + error['data'].toSource());
+        		  
+        		 var str=JSON.stringify(error);
+        		console.log("save error " + str);
+        	  }
+        	  );
+    		 
+    	 }// if(($scope.newname !=='undefined' ) && ($scope.newphone !=='undefined')){
     	
-    $scope.edit = function(id) {
-    		  $scope.contact = Contact.get({ id: id });
-    		//console.log("contacts.js contacs " +   $scope.contact );
-    };  
+    	};// $scope.add = function() {
+    	
+   
 	
     $scope.addFields = function (id) {
     	
@@ -110,7 +128,7 @@ app.controller('ContactCtrl', function($scope, Contact)  {
         //get a contact by ID
         Contact.get({id:id}, function(result) {
 		    $scope.contact = result;
-		    console.log('User name is ',$scope.contact.name);
+		    //console.log('User name is ',$scope.contact.name);
 		    
 		    // console.log(" selected_contact.name " +   selected_contact.toSource() );
 		      
@@ -131,8 +149,10 @@ app.controller('ContactCtrl', function($scope, Contact)  {
         
       }//  $scope.addFields = function (id,form) {
       
+    //submit button in the form
       $scope.submit = function(id,name,phone){
     	  
+    	 
     	//ng-hide  to unhide contact name and phone after submitting the form.
 		 $scope['hide_content_'+id] = false;  
     	//enable the edit button
@@ -147,7 +167,7 @@ app.controller('ContactCtrl', function($scope, Contact)  {
 			//name shouldn't be empty
 			if(name==''){
 				
-				alert('Name is required field');
+				//alert('Name is required field');
 				 refresh();
 			}
 			else{
@@ -164,10 +184,25 @@ app.controller('ContactCtrl', function($scope, Contact)  {
 		       });
 			}//else
 			
-	     });
+	     });//$scope.entry = Contact.get({id:id}, function() {
 		
 	
       };// $scope.submit = function(){
+      
+      //cancel button in the form.
+      $scope.cancel = function(id){
+    	  
+    	//ng-hide  to unhide contact name and phone after submitting the form.
+ 		 $scope['hide_content_'+id] = false;
+ 		 
+ 		//enable the edit button
+ 		$scope.clicked=false;
+ 		
+    	//remove the input fields for editing.
+  		$scope.fields = [];
+    	  refresh();
+    	  
+      };//  $scope.cancel = function(){
       
 });
 
