@@ -1,46 +1,3 @@
-/* angular.module('ContactApp',[])
-.controller('ContactCtrl',['$scope','Contact', function($scope, Contact) {
-
-$scope.contact = new Contact();
-
-var refresh = function() {
-  $scope.contacts = Contact.query(); 
-  console.log("contacts.js contacs " +  $scope.contacts);
-  $scope.contact ="";
-}
-refresh();
-
-$scope.add = function(contact) {
-  Contact.save(contact,function(contact){
-    refresh();
-  });
-};
-
-$scope.update = function(contact) {
-	contact.$update(function(){
-    refresh();
-  });
-};
-
-$scope.remove = function(contact) {
-	contact.$delete(function(){
-    refresh();
-  });
-};
-
-$scope.edit = function(id) {
-  $scope.contact = Contact.get({ id: id });
-};  
-
-$scope.deselect = function() {
-  $scope.contact = "";
-}
-
-}])
-
-*/
-
-//var app = angular.module('ContactApp',[]);
 
 app.controller('ContactCtrl', function($scope, Contact)  {
 	
@@ -62,6 +19,9 @@ app.controller('ContactCtrl', function($scope, Contact)  {
        
        //returns all contact objects.
        $scope.contacts = Contact.query(); 
+       //unset the name and the phone value in the input fields
+  	 	//$scope.addForm.name='';
+  	 	//$scope.addForm.phone='';
        $scope.contact ="";
        
        //loop thru all contacts data and set the submit button as a disabled button
@@ -83,32 +43,39 @@ app.controller('ContactCtrl', function($scope, Contact)  {
      //add new contact and save it.
      $scope.addContact = function() {
     	 
+    	
     	 //set the submitted to true to use angularjs validations
     	 $scope.submitted=true;
     	 
-    	 console.log("name " + $scope.newname+' phone '+$scope.newphone);
+    	// console.log("name " + $scope.newname+' phone '+$scope.newphone);
     	 
     	 if(($scope.newname !==null ) && ($scope.newphone !==null)){
     		 $scope.contact = new Contact();
         	 $scope.contact.name=$scope.newname;
         	 $scope.contact.phone=$scope.newphone;
         	 
-        	  Contact.save( $scope.contact,function(data){
+        	  Contact.save( $scope.contact,function(result){
+        		
         			//hide the add contact form 
         	       $scope.addcontact_button_clicked = true;
         	       
         	       //unset ng-hide the add new contact button.
         	       $scope.addcontact_button=false;
         	    
-        	       console.log("save data " + data);
+        	       //console.log("save data " + result);
         	       //show contact list
         	       refresh();
         	  },
+        	  //error occured. 
         	  function(error){
-        		  console.log("save error " + error['data'].toSource());
         		  
-        		 var str=JSON.stringify(error);
-        		console.log("save error " + str);
+        		  //assign to the scope and output the error message in the client side
+        		  $scope.errormsg=''; 
+        		  $scope.errormsg = error.data.errmsg; 
+        		  console.log("save error " + error.data.errmsg);
+        		  
+        		 //var str=JSON.stringify(error);
+        		//console.log("save error " + str);
         	  }
         	  );
     		 
@@ -163,7 +130,8 @@ app.controller('ContactCtrl', function($scope, Contact)  {
 		
 		//update the phone/name from the form.
 		$scope.entry = Contact.get({id:id}, function() {
-	         
+			
+			$scope.contact = new Contact();
 			//name shouldn't be empty
 			if(name==''){
 				
@@ -175,13 +143,28 @@ app.controller('ContactCtrl', function($scope, Contact)  {
 				//assign new data for update.
 				$scope.entry.name= name;
 				$scope.entry.phone= phone;
-				$scope.entry.$update(function(){
+				$scope.entry.$update($scope.contact, function(){
 		        	  
 		        //console.log('Updating user with id ');
 					
 				//show all contacts	
 		        refresh();
-		       });
+		       },
+		       
+		       //error occured. 
+	        	  function(error){
+		    	
+	        		  //assign to the scope and output the error message in the client side
+		    	      $scope.errormsg=''; 
+	        		  $scope.errormsg = error.data.errmsg; 
+	        		  console.log("save error " + $scope.errormsg);
+	        		  
+	        		 //var str=JSON.stringify(error);
+	        		//console.log("save error " + str);
+	        	  }
+				
+				
+				);
 			}//else
 			
 	     });//$scope.entry = Contact.get({id:id}, function() {
@@ -200,6 +183,20 @@ app.controller('ContactCtrl', function($scope, Contact)  {
  		
     	//remove the input fields for editing.
   		$scope.fields = [];
+    	  refresh();
+    	  
+      };//  $scope.cancel = function(){
+      
+      //cancel button in the form.
+      $scope.cancelAdd = function(){
+    	  
+    	//hide the add contact form 
+          $scope.addcontact_button_clicked = true;
+          
+          //unset ng-hide the add new contact button.
+          $scope.addcontact_button=false;
+          
+          $scope.submitted=false;
     	  refresh();
     	  
       };//  $scope.cancel = function(){

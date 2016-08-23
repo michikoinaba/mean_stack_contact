@@ -29,6 +29,8 @@
    <div ng-controller="ContactCtrl" class="col-sm-offset-2 col-sm-7">
    {{title}}
    
+  
+   
    	<div class="form-group">
 	    <div class="col-sm-offset-1 col-sm-5">
 	      	<button  class="btn btn-danger"  ng-click="addcontact_button_clicked=false; addcontact_button=true" ng-hide="addcontact_button" >Add New Contact</button>
@@ -37,36 +39,51 @@
    <br><br>
    
    	<div  class="form-horizontal" role="form"  ng-hide="addcontact_button_clicked" >
-   	 <form  name="addForm"  >
-   		<div class="form-group"ng-class="{'has-error' :submitted && addForm.name.$invalid}"><!-- {true: 'error'}[submitted && addForm.name.$invalid] -->
+   	 <form  name="addForm" novalidate >
+   		<div class="form-group"ng-class="{'has-error' :submitted && addForm.name.$invalid}" ><!-- {true: 'error'}[submitted && addForm.name.$invalid] -->
 	   	
 	     <label class="control-label col-sm-2" for="name">Name:</label>
 		    <div class="col-sm-5" >
 		    <input  type="text" name="name"  class="form-control" ng-model="newname" required/>	
 		     <p ng-show=" submitted && addForm.name.$error.required" class="help-block">Contact Name is required.</p>
+		      
 		   </div>
 	   </div>
-	   <div class="form-group" ng-class="{'has-error' :submitted && addForm.phone.$invalid}">
+	   <div class="form-group"   ng-class="{'has-error' :submitted && addForm.phone.$invalid}" novalidate>
 	    <label class="control-label col-sm-2"for="phone">Phone:</label>
 	       <div class="col-sm-5">
 	    	<input  type="text" name="phone"  class="form-control" ng-model="newphone" ng-pattern="/^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/"  required/>	
 	   		  <p ng-show="submitted && addForm.phone.$error.required" class="help-block"  >Phone Number is required.</p>
 		      <p  ng-show="submitted && addForm.phone.$error.pattern" class="help-block">Must be a valid 10 digit phone number</p>
+		      <p ng-show=" submitted && errormsg!=null" class="help-block"><font color="red">{{errormsg}}</font></p>
 	   		</div>
 	    </div>
 	  
 	  	<div class="form-group">
 	    	<div class="col-sm-offset-2 col-sm-7">
 	      		<button  type="submit" class="btn btn-danger" ng-click="addContact(addForm.newname,addForm.newphone)"  >Add</button>
+	      		<button   class="btn btn-danger" ng-click="cancelAdd()"  >Cancel</button>
 	    	</div>
     	</div>
 	   	</form> 
    </div>
+   
+   
+    <div class="form-group">
+     <div class=" col-sm-8">
+     	
+     	 <label  for="search">Search:</label>
+     	 <input class="form-control" ng-model="search_word" name="search" />
+   
+     </div>
+    	<br><br><br>
+   </div>
+   
      <ul class="inbox__list">
 	    <li ng-show="!contacts.length" class="no-emails">
 	      No Contacts in your database.
 	    </li>
-	    <li ng-repeat="one_contact in contacts | orderBy: 'name' " ><!--sort by name  -->
+	    <li ng-repeat="one_contact in contacts | orderBy: 'name' | filter: search_word" ><!--sort by name  -->
 	      <div class="inbox__list-info" >
 	        <p class="inbox__list-from" id="name_{{one_contact._id}}" ng-hide="hide_content_{{one_contact._id}}" > Name:{{ one_contact.name }} </p>
 	        <p class="inbox__list-subject" id="phone_{{one_contact._id}}" ng-hide="hide_content_{{one_contact._id}}" >Phone:{{one_contact.phone}}</p>
@@ -87,7 +104,7 @@
 		         	 <p ng-show="fieldForm.name.$invalid && !fieldForm.name.$pristine" class="help-block">Contact Name is required.</p>
 		        </div>
 		        
-		        <div class="form-group" ng-class="{ 'has-error' : fieldForm.phone.$invalid && !fieldForm.phone.$pristine }">
+		        <div class="form-group" ng-class="{ 'has-error' : fieldForm.phone.$invalid && !fieldForm.phone.$pristine  }">
 		        	<label class="control-label col-sm-1" for="phone">Phone:</label>
 				 
 				 	<div class="col-sm-5" >
@@ -95,6 +112,7 @@
 		       
 		         		<p ng-show="fieldForm.phone.$invalid && !fieldForm.phone.$pristine" class="help-block"  >Phone Number is required.</p>
 		        		<p  ng-show="fieldForm.phone.$error.pattern" class="help-block">Must be a valid 10 digit phone number</p>
+		        		 <p ng-show=" errormsg!=null" class="help-block"><font color="red">{{errormsg}}</font></p>
 		        	</div>
 		        <input type="hidden" ng-model="field.id"/>
 		        </div>

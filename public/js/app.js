@@ -20,16 +20,5 @@ return $resource('/api/contacts/:id', { id: '@_id' }, {//adding the endpoint
 });
 
 
-//Showing loading indicator on top while data is requested from database
-app.directive('editForm',   function ()
-{
- return {
-     restrict: 'EA',
-     scope: true,  // use a child scope that inherits from parent
-     replace: true,
-     //templateUrl: "js/edit.tmpl.html",
-     template: '<h3>Hello World!!</h3>'
-     // controllerAs: 'modify'
- };
-});
+
 
