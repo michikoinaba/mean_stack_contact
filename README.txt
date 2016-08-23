@@ -9,6 +9,6 @@ Node.js modules
  -morgan
  
  AngularJS
- - use ngResource to CURD api
+ - use ngResource to CRUD api
  
 You can add/edit/delete contacts from the interface.
