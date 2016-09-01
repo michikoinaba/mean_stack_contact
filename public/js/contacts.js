@@ -1,13 +1,10 @@
 
-app.controller('ContactCtrl', function($scope, Contact)  {
+app.controller('ContactCtrl',['$scope','$uibModal','Contact', function($scope,$uibModal ,Contact){
 	
 	  'use strict';
       $scope.title= "Contact List";
       $scope.contact = new Contact();
-     
     
-   
-     
      //refresh function retreive all contact data from mongodb and output them.
      var refresh = function() {
        
@@ -172,6 +169,22 @@ app.controller('ContactCtrl', function($scope, Contact)  {
 	
       };// $scope.submit = function(){
       
+ 
+      $scope.remove = function (id) {
+    	  
+    	  $scope.entry = Contact.get({id:id}, function() {
+    		  $scope.entry.$delete(function(){
+                  console.log('Deleting user with id '+id);
+                //show all contacts	
+  		        refresh();
+              });
+         });
+          
+        }//  $scope.addFields = function (id,form) {
+      
+      
+   
+      
       //cancel button in the form.
       $scope.cancel = function(id){
     	  
@@ -201,5 +214,148 @@ app.controller('ContactCtrl', function($scope, Contact)  {
     	  
       };//  $scope.cancel = function(){
       
-});
+      
+/////////different way of doing it//////
+      $scope.modalConfirm = function () { 
+    	 
+    	  
+    	  var modalInstance = $uibModal.open({
+             // size: size,
+              animation: false,
+              backdrop: 'static',
+              templateUrl : 'templates/CustomModal.html',
+              controller: 'ModalController',            
+              resolve: {
+                  contact: function () {
+                      return $scope.contact;
+                  }
+              }
+          });
+          modalInstance.result.then(function (response) {
+              debugger;            
+              $scope.currentContact = response;
+              $state.go('contact.detail', { 'contactId': response.CustomerId });            
+          }, function () {
+              $log.info('Modal dismissed at: ' + new Date());
+          });
+      };
 
+      
+}]); //app.controller('ContactCtrl',['$uibModal','$log','$scope','Contact','items', function($uibModal,$log,$scope, Contact, items ){
+
+
+/////////////Modal logic///////////
+
+
+//app.controller('ModalController', ModalController);
+//app.directive('modalTrigger', modalTriggerDirective);
+//app.factory('$Modal', ModalFactory);
+
+/*
+function ModalController($scope,$uibModalInstance ,modalInstance,items) {
+	
+var vm = this;
+vm.content = items;
+
+vm.confirm = function(contactID){
+	///remove the selected contactID from DB
+	  vm.contact = new Contact();
+	
+  	   Contact.get({id:contactID}, function() {
+  		  vm.entry.$delete(function(){
+              
+              //show all contacts	
+		       // refresh();
+            });
+       });
+ 
+	
+};
+
+
+vm.cancel = $uibModalInstance.dismiss;
+};
+
+
+function modalTriggerDirective($Modal) {
+	function postLink(scope, iElement, iAttrs) {
+	  function onClick() {
+	    //var size = scope.$eval(iAttrs.size) || 'lg'; // default to large size
+	    var title = scope.$eval(iAttrs.title) ;
+	    var message = scope.$eval(iAttrs.message) ;
+	    var contactID = scope.$eval(iAttrs.hidden) ;
+	    $Modal.open(contactID,title, message);
+	  }
+	  iElement.on('click', onClick);
+	  scope.$on('$destroy', function() {
+	    iElement.off('click', onClick);
+	  });
+	}//function postLink(scope, iElement, iAttrs) {
+
+	return {
+	  link: postLink
+	};
+}//function modalTriggerDirective($Modal) {
+//modalTriggerDirective.$inject = ['$Modal'];
+
+function ModalFactory($uibModal, Contact) {
+var open = function (contactID, title, message) {
+	console.log('hidden '+contactID);
+	var vm=this;
+	
+  var modalInstance =  $uibModal.open({
+    controller: 'ModalController',
+    controllerAs: 'vm',
+    templateUrl : 'templates/CustomModal.html',
+   // size: size,
+    resolve: {
+      items: function() {
+        return {
+          title: title,
+          message: message,
+          contactID: contactID
+        };
+      }
+    }
+  });
+  
+
+  modalInstance.result.then(function (selectedItem) {
+	  vm.selected = selectedItem;
+  }, function () {
+	  console.log('Modal dismissed at: ' + new Date());
+  });
+  
+  
+};//var open = function ( title, message) {
+
+return {
+  open: open
+};
+}//function ModalFactory($uibModal) {
+
+*/
+
+
+
+app.controller('ModalController', 
+		 ['$scope', '$uibModalInstance', 'Contact', 'contact', 
+		 function ($scope, $uibModalInstance, Contact, contact) {
+
+		    $scope.contact = contact;
+		    $scope.headerTitle = 'Remove Contact';
+		    $scope.messag= 'Do you want to remove '+contact.name+'?';
+		    $scope.save = function () {
+		        Customer.Save($scope.customer).then(function (response) {
+		            $modalInstance.close(response.data);
+		        })
+		    };
+
+		    $scope.cancel = function () {
+		        $modalInstance.dismiss('cancel');
+		    };
+		}]); 
+
+
+//bootstrap add two different ng-app
+//angular.bootstrap(document.getElementById("App2"), ['ModalApp']);

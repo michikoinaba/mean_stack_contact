@@ -14,4 +14,5 @@ var schema = new mongoose.Schema({
 });
 
 //Return model
-module.exports = restful.model('Contact', schema);
+module.exports = restful.model(
+		'Contact', schema);

@@ -1,9 +1,10 @@
 
-var app = angular.module('ContactApp', ['ngResource']);
+var app = angular.module('ContactApp', [ 'ngAnimate', 'ngSanitize','ui.bootstrap','ngResource']);
 
 
+//,'ngAnimate', 'ngSanitize',
 //Create a resource factory to access products table from database 
-app.factory('Contact',function($resource) {
+app.factory('Contact',['$resource',function($resource) {
 return $resource('/api/contacts/:id', { id: '@_id' }, {//adding the endpoint
  update: { // We need to define this method manually as it is not provided with ng-resource
    method: 'PUT'
@@ -17,7 +18,7 @@ return $resource('/api/contacts/:id', { id: '@_id' }, {//adding the endpoint
    // 'destroy': { method: 'DELETE' }
 	
 });
-});
+}]);
 
 
 
