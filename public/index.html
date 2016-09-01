@@ -1,5 +1,5 @@
 <!doctype html>
-<html ng-app="ContactApp">
+<html >
   <head>
     <meta charset="utf-8">
     <title>Contacts</title>
@@ -11,8 +11,9 @@
     </style>
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700' rel='stylesheet' type='text/css'>
       <!-- Vendor libraries -->
+    
 
-	 <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"><!-- load bootstrap -->
+	  <link href="//netdna.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
 	 
 
   </head>
@@ -24,13 +25,16 @@
       </div>
     </header>
 
-    <main class="main" role="main">
-   
+
+
+
+    <main ng-app="ContactApp" class="main" role="main">
+
    <div ng-controller="ContactCtrl" class="col-sm-offset-2 col-sm-7">
+   
    {{title}}
    
-  
-   
+ 
    	<div class="form-group">
 	    <div class="col-sm-offset-1 col-sm-5">
 	      	<button  class="btn btn-danger"  ng-click="addcontact_button_clicked=false; addcontact_button=true" ng-hide="addcontact_button" >Add New Contact</button>
@@ -126,25 +130,88 @@
 		         </form> 
 		      </div>
 		   	  <br>
-		 
-			 
+	
+	
 			  <button class="btn btn-warning" ng-click="addFields(one_contact._id)" ng-disabled="clicked" >Edit</button>
-	      </div><!--  <div class="inbox__list-info"> -->
-	 
-	    </li>
-  </ul>
+			  <button class="btn btn-warning"   type="button"  ng-click="modalConfirm(one_contact._id,one_contact.name)">Remove</button> 
+ 			 <!--  <button class="btn btn-warning" modal-trigger  title="'Remove Contact'" hidden="'{{one_contact._id}}'" message="'Do you want to remove {{one_contact.name}}?'" >Remove</button>-->
+			
+				</div><!--  <div class="inbox__list-info"> -->
+					 
+			</li>
+		</ul>
+				
+				
+				
+				<!--model 
+					<div class="modal-content" >
+						<script type="text/ng-template" id="templates/CustomModal.html">
+  						<div class="modal-header" >
+    						<h3 class="modal-title">{{vm.content.title}}</h3>
+  						</div>
+  						<div class="modal-body">
+    						<h4>{{vm.content.message}}</h4>
+  						</div>
+  						<div class="modal-footer">
+    					<button class="btn btn-primary" type="button" ng-click="vm.confirm({{contactID}})">
+     					 Yes
+    					</button>
+   		 				<button class="btn btn-danger" type="button" ng-click="vm.cancel()">
+      					No
+    					</button>
+  						</div>
+				</script>
+				
+			
+				</div>
+				
+				
+				<!-- end of model -->
+				  
+				   <div class="modal-content" >
+						<script type="text/ng-template" id="templates/CustomModal.html">
+  						<div class="modal-header" >
+    						<h3 class="modal-title">{{headerTitle}}</h3>
+  						</div>
+  						<div class="modal-body">
+    						<h4>{{messag}}</h4>
+  						</div>
+  						<div class="modal-footer">
+    					<button class="btn btn-primary" type="button" ng-click="vm.confirm({{contactID}})">
+     					 Yes
+    					</button>
+   		 				<button class="btn btn-danger" type="button" ng-click="vm.cancel()">
+      					No
+    					</button>
+  						</div>
+				</script>
+				
+			
+				   
+				   
 	</div><!-- <div ng-controller="ContactCtrl"> -->
-    
+  
   
     </main>
 
+
+
+
   <!-- SPELLS -->
-	  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-route.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-resource.min.js"></script>
+   
+    <script src="http://code.jquery.com/jquery-2.0.1.min.js"></script>
+   
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-route.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-resource.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+        <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-animate.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular-sanitize.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.1.3.js"></script>
+    
      <script src="js/app.js"></script>  
 	<script src="js/contacts.js"></script> <!-- load up our controller --> 
-	
+	<script src="js/modal.js"></script> 
   </body>
 </html>
 <!--  -->
