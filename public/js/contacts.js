@@ -218,7 +218,6 @@ app.controller('ContactCtrl',['$scope','$uibModal','Contact', function($scope,$u
 /////////different way of doing it//////
       $scope.modalConfirm = function () { 
     	 
-    	  
     	  var modalInstance = $uibModal.open({
              // size: size,
               animation: false,
