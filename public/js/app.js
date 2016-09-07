@@ -10,7 +10,7 @@ return $resource('/api/contacts/:id', { id: '@_id' }, {//adding the endpoint
    method: 'PUT'
 	 
  },
-
+// 'delete': { method: 'DELETE'  }
  // save:  { method: 'POST' },
    // 'index':   { method: 'GET', isArray: true },
    // 'show':    { method: 'GET', isArray: false },
